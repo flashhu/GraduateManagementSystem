@@ -20,20 +20,24 @@ public class MainPageUI {
 	System.out.println("");
 	System.out.println("1.学生");
 	System.out.println("2.管理员");
+	System.out.println("(输入exit退出系统）");
 	System.out.println("");
 	System.out.println("-------------------------------------------------------");
-	System.out.println("学生可用账号\t201800 \t密码\t00 \n管理员可用账号\t001 \t密码\t1\n");
+	System.out.println("学生可用账号\t201800 \t初始密码\t00 \n管理员可用账号\t001 \t初始密码\t1\n");
 	System.out.print("请选择：");
-	int choice = input.nextInt();
+	String choice = input.next();
 	switch (choice) {
-	  case 1:
+	  case "1":
 		StudentUI.loginPage();
 		break;
-	  case 2:
+	  case "2":
 		AdminUI.loginPage();
 		break;
+	  case "exit":
+		System.out.println("\n====================== 感谢使用！====================");
+		break;
 	  default:
-		System.out.println("输入有误！\n\n\n");
+		System.err.println("输入有误！\n\n\n");
 		MainPageUI.welcome();
 	}
   }

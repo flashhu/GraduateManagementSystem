@@ -1,13 +1,16 @@
 package ui;
 
+import java.util.Map;
 import java.util.Scanner;
 
+import entity.StudentInfo;
 import service.AdminService;
+import service.BaseService;
 import util.Init;
 
 public class AdminUI {
   //数据初始化
-  static Init init = new Init();
+  static Init init = StudentUI.init;
   static AdminService adminService = new AdminService();
   
   private static Scanner input = new Scanner(System.in);
@@ -15,6 +18,8 @@ public class AdminUI {
   private static String[] inputInfo = new String[2];
   //修改时输入的新旧信息
   private static String[] modifyInfo = new String[2];
+  //增加记录时的输入信息
+  private static String[] addInfo = new String[7];
   
   /**
    * 管理端登录界面
@@ -30,14 +35,14 @@ public class AdminUI {
 	   break;
 	  System.out.println("请输入密码：");
 	  inputInfo[1] = input.next();
-	  if (AdminService.login(inputInfo, AdminUI.init.adminList)) {
+	  if (AdminService.login(inputInfo, AdminUI.init.adminMap)) {
 		System.out.println("");
 	    System.out.println("-------------------------------------------------------");
 	    System.out.println(" 登录成功！");
 		AdminUI.mainPage();
 		break;
 	  }
-	  System.out.println("输入有误！\n\n");
+	  System.err.println("输入有误！\n\n");
     }
   }
   
@@ -51,9 +56,8 @@ public class AdminUI {
 	System.out.println("=======================================================");
 	System.out.println("");
 	System.out.println("1.信息管理");
-	System.out.println("2.信息汇总");
-	System.out.println("3.个人信息");
-	System.out.println("（输入exit退出登录）");
+	System.out.println("2.个人信息");
+	System.out.println("（输入logout退出登录）");
 	System.out.println("");
 	System.out.println("-------------------------------------------------------");
 	int isInputRight = 0; //控制是否输入合法
@@ -66,20 +70,16 @@ public class AdminUI {
 	      isInputRight = 1;
 	      break;
 	    case "2":
-		  AdminUI.infoCollectPage();
-		  isInputRight = 1;
-		  break;
-	    case "3":
 		  AdminUI.personalInfoPage();
 		  isInputRight = 1;
 		  break;
-	    case "exit":
-	      System.out.println("\n");
+	    case "logout":
+	      System.out.println("您已登出管理员端 \n\n");
 		  MainPageUI.welcome();
 		  isInputRight = 1;
 		  break;
 	    default:
-		  System.out.println("输入有误！\n\n");
+		  System.err.println("输入有误！\n\n");
 	  }
 	}
   }
@@ -92,19 +92,260 @@ public class AdminUI {
 	System.out.println("\n\n");
 	System.out.println(">管理员主页>信息管理");
 	System.out.println("=======================================================");
-	System.out.println("");  
+	System.out.println(""); 
+	System.out.println("1.查看"); 
+	System.out.println("2.增加");
+	System.out.println("3.编辑");
+	System.out.println("4.删除");
+	System.out.println("5.查询");
+	System.out.println("（输入back返回上一页）");
+	System.out.println(""); 
 	System.out.println("-------------------------------------------------------");
+	int isInputRight = 0; //控制是否输入合法
+	while(isInputRight == 0) {
+	  System.out.print("请选择：");
+	  String choice = input.next();
+	  switch (choice) {
+	    case "1":
+	      isInputRight = 1;
+	      AdminUI.showAllStudentInfo();
+	      break;
+	    case "2":
+		  isInputRight = 1;
+		  AdminUI.addStudentInfo();
+		  break;
+	    case "3":
+		  isInputRight = 1;
+		  AdminUI.ModifyStudentPage();
+		  break;
+	    case "4":
+		  isInputRight = 1;
+		  AdminUI.delStudentInfo();
+		  break;
+	    case "5":
+	      isInputRight = 1;
+	      AdminUI.inquireStuInfo();
+	      break;
+	    case "back":
+		  AdminUI.mainPage();
+		  isInputRight = 1;
+		  break;
+	    default:
+		  System.err.println("输入有误！\n\n");
+	  }
+	}
   }
   
   /**
-   * 管理端信息汇总页
+   *管理员端显示全部毕业生信息 
    * */
-  public static void infoCollectPage() {
+  public static void showAllStudentInfo() {
 	System.out.println("\n\n");
-	System.out.println(">管理员主页>信息汇总");
+	System.out.println(">管理员主页>信息管理>查看");
 	System.out.println("=======================================================");
+	System.out.println(""); 
+	System.out.println("学号\t姓名\t性别\t专业\t毕业年份\t联系方式\t\t就业类型\t"); 
+	for (Map.Entry<String, StudentInfo> entry : init.stuMap.entrySet()) {
+	  System.out.println(entry.getValue().getId()+"\t"+ entry.getValue().getName()+"\t"+entry.getValue().getSex()+"\t"+entry.getValue().getSpecialty()+"\t"+entry.getValue().getGraduYear()+"\t"+ entry.getValue().getPhone()+"\t"+entry.getValue().getEmployStatus()+"\t");
+	}
+	System.out.println("（输入back返回上一页；输入exit返回管理员主页）");
+	System.out.println(""); 
+	System.out.println("-------------------------------------------------------");
+	int isInputRight = 0; //控制是否输入合法
+	while(isInputRight == 0) {
+	  System.out.println("请输入：");
+	  switch (input.next()){
+	    case "back":
+	      isInputRight = 1;
+	      AdminUI.infoManagePage();
+		  break;
+	    case "exit":
+	      isInputRight = 1;
+	      AdminUI.mainPage();
+		default:
+		  System.err.println("输入有误! \n\n");
+	  }
+	}
+  }
+  
+  /**
+   * 管理端增加学生记录
+   * */
+  public static void addStudentInfo() {
+	System.out.println("\n\n");
+	System.out.println(">管理员主页>信息管理>增加");
+	System.out.println("=======================================================");
+	System.out.print("请输入学号：");
+	addInfo[0] = input.next();
+	System.out.print("请输入姓名：");
+	addInfo[1] = input.next();
+	System.out.print("请输入性别：");
+	addInfo[2] = input.next();
+	System.out.print("请输入毕业年份：");
+	addInfo[3] = input.next();
+	while(true) {
+	  System.out.print("请输入联系方式：");
+	  addInfo[4] = input.next();
+	  if(BaseService.isMobile(addInfo[4])) {
+		break;
+	  }else {
+		System.err.println("输入有误！");
+	  }
+	}
+	System.out.print("请输入专业：");
+	addInfo[5] = input.next();
+	System.out.print("请输入密码：");
+	addInfo[6] = input.next();
+	init.stuMap.put(addInfo[0], new StudentInfo(addInfo[0], addInfo[1], addInfo[6], addInfo[4], addInfo[2], addInfo[3], addInfo[5]));
 	System.out.println("");  
 	System.out.println("-------------------------------------------------------");
+	System.out.println("添加成功！");
+	AdminUI.infoManagePage();
+  }
+  
+  /**
+   * 管理端编辑指定学号的记录
+   * */
+  public static void ModifyStudentPage() {
+	System.out.println("\n\n");
+	System.out.println(">管理员主页>信息管理>编辑");
+	System.out.println("=======================================================");
+	System.out.println(""); 
+	System.out.println("1.专业");
+	System.out.println("2.毕业年份");
+	System.out.println("（输入back返回上一页；输入exit返回管理员主页）");
+	System.out.println("");  
+	System.out.println("-------------------------------------------------------");
+	int isInputRight = 0; //控制是否输入合法
+	while(isInputRight == 0) {
+	  System.out.print("请选择：");
+	  String choice = input.next();
+	  switch (choice) {
+	    case "1":
+	      AdminUI.modifyStuSpecialty();
+	      isInputRight = 1;
+	      break;
+	    case "2":
+		  AdminUI.modifyStuGraYear();
+		  isInputRight = 1;
+		  break;
+	    case "exit":
+		  AdminUI.mainPage();
+		  isInputRight = 1;
+		  break;
+	    case "back":
+		  AdminUI.infoManagePage();
+		  isInputRight = 1;
+		  break;
+	    default:
+		  System.err.println("输入有误！\n\n");
+	  }
+	}
+
+  }
+  
+  /**
+   * 管理员端修改学生专业
+   * */
+  public static void modifyStuSpecialty() {
+	System.out.println("\n\n");
+	System.out.println(">管理员主页>信息管理>编辑>专业");
+	System.out.println("=======================================================");
+	while(true) {
+	  System.out.println("请输入学生学号：");
+	  inputInfo[0] = input.next();
+	  if(AdminService.isInStuList(inputInfo[0], init.stuMap)) {
+		System.out.println("请输入新专业：");
+		inputInfo[1] = input.next();
+		AdminService.modifySpecialty(inputInfo[1], inputInfo[0], init.stuMap);
+		break;
+	  }else {
+		System.err.println("未找到对应项！\n\n");
+	  }
+	}
+	System.out.println("-------------------------------------------------------");
+	System.out.println("编辑成功！");
+	AdminUI.infoManagePage();
+  }
+  
+  /**
+   * 管理员端修改学生毕业年份
+   * */
+  public static void modifyStuGraYear() {
+	System.out.println("\n\n");
+	System.out.println(">管理员主页>信息管理>编辑>毕业年份");
+	System.out.println("=======================================================");
+	while(true) {
+	  System.out.println("请输入学生学号：");
+	  inputInfo[0] = input.next();
+	  if(AdminService.isInStuList(inputInfo[0], init.stuMap)) {
+		System.out.println("请输入新毕业年份：");
+		inputInfo[1] = input.next();
+		AdminService.modifyGradYear(inputInfo[1], inputInfo[0], init.stuMap);
+		break;
+	  }else {
+		System.err.println("未找到对应项！\n\n");
+	  }
+	}
+	System.out.println("-------------------------------------------------------");
+	System.out.println("编辑成功！");
+	AdminUI.infoManagePage();
+  }
+  
+  /**
+   * 管理端删除学生记录
+   * */
+  public static void delStudentInfo() {
+	System.out.println("\n\n");
+	System.out.println(">管理员主页>信息管理>删除");
+	System.out.println("=======================================================");
+	while(true) {
+      System.out.println("请输入学生学号：");  
+	  inputInfo[0] = input.next();
+	  if(AdminService.isInStuList(inputInfo[0], init.stuMap)) {
+		System.out.println("确认删除学号为 "+inputInfo[0]+" 同学的记录吗？");
+		System.out.println("确认，请输入confirm;返回上一页，请输入back");
+		inputInfo[1] = input.next();
+	    if(inputInfo[1].equals("confirm")) {
+	      init.stuMap.remove(inputInfo[0]);
+	      System.out.println("");  
+	      System.out.println("-------------------------------------------------------"); 
+	      System.out.println("删除成功！");
+	      AdminUI.infoManagePage(); 
+	      break;
+	    }else if(inputInfo[1].equals("back")){
+	   	  AdminUI.infoManagePage();
+	      break;
+	    }else {
+	      System.err.println("输入有误！\n");
+	    } 
+	  }else {
+		System.err.println("未找到对应项！\n\n");
+	  }
+	}
+  }
+  
+  /**
+   * 管理端查询信息
+   * */
+  public static void inquireStuInfo() {
+	System.out.println("\n\n");
+	System.out.println(">管理员主页>信息管理>查询");
+	System.out.println("=======================================================");
+	while(true) {
+	  System.out.println("请输入学生学号：");  
+	  inputInfo[0] = input.next();
+	  if(AdminService.isInStuList(inputInfo[0], init.stuMap)) {
+		String[] inquireStuInfo = AdminService.inquireInfo(inputInfo[0], init.stuMap);
+		System.out.println("\n查询结果：\n学号\t姓名\t性别\t专业\t毕业年份\t联系方式\t\t就业类型\t"); 
+		System.out.println(inquireStuInfo[0]+"\t"+inquireStuInfo[1]+"\t"+inquireStuInfo[2]+"\t"+inquireStuInfo[3]+"\t"+inquireStuInfo[4]+"\t"+inquireStuInfo[5]+"\t"+inquireStuInfo[6]);
+		System.out.println("");   
+		break;
+	  }else {
+		System.err.println("未找到对应项！\n\n");  
+	  }
+	} 
+	System.out.println("-------------------------------------------------------");	
   }
   
   /**
@@ -117,7 +358,7 @@ public class AdminUI {
 	System.out.println("");  
 	System.out.println("1.查看");
 	System.out.println("2.修改");
-	System.out.println("（输入exit返回管理员主页）");
+	System.out.println("（输入back返回上一页）");
 	System.out.println("");
 	System.out.println("-------------------------------------------------------");
 	int isInputRight = 0; //控制是否输入合法
@@ -133,13 +374,13 @@ public class AdminUI {
 		  AdminUI.infoModifyPage();;
 		  isInputRight = 1;
 		  break;
-	    case "exit":
+	    case "back":
 	      System.out.println("\n");
 		  AdminUI.mainPage();;
 		  isInputRight = 1;
 		  break;
 	    default:
-		  System.out.println("输入有误！\n\n");
+		  System.err.println("输入有误！\n\n");
 	  }
 	}
   }
@@ -148,7 +389,7 @@ public class AdminUI {
    * 管理员查看个人信息页
    * */
   public static void infoInquirePage() {
-	String[] currentUserInfo = AdminService.getAdminInfo(inputInfo[0], init.adminList);
+	String[] currentUserInfo = AdminService.getAdminInfo(inputInfo[0], init.adminMap);
 	System.out.println("\n\n");
 	System.out.println(">管理员主页>个人信息>查看");
 	System.out.println("=======================================================");
@@ -158,16 +399,19 @@ public class AdminUI {
 	System.out.println("密码\t\t" + currentUserInfo[2]);
 	System.out.println("部门\t\t" + currentUserInfo[4]);
 	System.out.println("联系方式\t\t" + currentUserInfo[3]);
-	System.out.println("（输入exit返回个人信息页）");
+	System.out.println("（输入back返回上一页；输入exit返回管理员主页）");
 	System.out.println(""); 
 	System.out.println("-------------------------------------------------------");
 	while(true) {
 	  System.out.print("请输入：");
-	  if(input.next().equals("exit")) {
-	    AdminUI.personalInfoPage();
-		break;
-	  }else {
-		System.out.println("输入有误! \n\n");
+	  switch (input.next()){
+	    case "back":
+	      AdminUI.personalInfoPage();
+		  break;
+	    case "exit":
+	      AdminUI.mainPage();
+		default:
+		  System.err.println("输入有误! \n\n");
 	  }
 	}
   }
@@ -182,7 +426,7 @@ public class AdminUI {
 	System.out.println(""); 
 	System.out.println("1.密码");
 	System.out.println("2.联系方式");
-	System.out.println("（输入exit返回个人信息页）");
+	System.out.println("（输入back返回上一页；输入exit返回管理员主页）");
 	System.out.println(""); 
 	System.out.println("-------------------------------------------------------");  
 	int isInputRight = 0; //控制是否输入合法
@@ -198,12 +442,16 @@ public class AdminUI {
 		  AdminUI.phoneModify();;
 		  isInputRight = 1;
 		  break;
-	    case "exit":
+	    case "back":
 		  AdminUI.personalInfoPage();;
 		  isInputRight = 1;
 		  break;
+	    case "exit":
+	      AdminUI.mainPage();
+	      isInputRight = 1;
+	      break;
 	    default:
-		  System.out.println("输入有误！\n\n");
+		  System.err.println("输入有误！\n\n");
 	  }
 	}
   }
@@ -212,20 +460,20 @@ public class AdminUI {
    * 管理员修改密码页
    * */
   public static void pwdModify() {
-	String[] currentUserInfo = AdminService.getAdminInfo(inputInfo[0], init.adminList);
+	String[] currentUserInfo = AdminService.getAdminInfo(inputInfo[0], init.adminMap);
 	System.out.println("\n\n");
 	System.out.println(">管理员主页>个人信息>修改>密码");
 	System.out.println("=======================================================");
     while(true) {
-	  System.out.println("请输入原有密码：（输入exit返回修改页）");
+	  System.out.println("请输入原有密码：（输入back返回上一页）");
 	  modifyInfo[0] = input.next();
-	  if(modifyInfo[0].equals("exit")) {
+	  if(modifyInfo[0].equals("back")) {
 		AdminUI.infoModifyPage();;
 		break;  
 	  }else if(modifyInfo[0].equals(currentUserInfo[2])) {
 		System.out.println("请输入新密码：");
 		modifyInfo[1] = input.next();
-		if (AdminService.modifyPwd(modifyInfo[1], currentUserInfo[0], init.adminList)) {
+		if (AdminService.modifyPwd(modifyInfo[1], currentUserInfo[0], init.adminMap)) {
 		  System.out.println("");
 		  System.out.println("-------------------------------------------------------");
 		  System.out.println("修改密码成功！新密码为" + modifyInfo[1]);
@@ -233,7 +481,7 @@ public class AdminUI {
 		  break;
 		}
 	  }else {
-		System.out.println("输入有误！\n\n");
+		System.err.println("输入有误！\n\n");
 	  }
     }
   }
@@ -242,24 +490,24 @@ public class AdminUI {
    * 管理员修改联系方式页
    * */
   public static void phoneModify() {
-	String[] currentUserInfo = AdminService.getAdminInfo(inputInfo[0], init.adminList);
+	String[] currentUserInfo = AdminService.getAdminInfo(inputInfo[0], init.adminMap);
 	System.out.println("\n\n");
 	System.out.println(">管理员主页>个人信息>修改>联系方式");
 	System.out.println("=======================================================");
     while(true) {
-	  System.out.println("请输入新联系方式：（输入exit返回修改页）");
+	  System.out.println("请输入新联系方式：（输入back返回上一页）");
 	  modifyInfo[0] = input.next();
-	  if(modifyInfo[0].equals("exit")) {
+	  if(modifyInfo[0].equals("back")) {
 		AdminUI.infoModifyPage();
 		break;  
-	  }else if (AdminService.modifyPhone(modifyInfo[0], currentUserInfo[0], init.adminList)) {
+	  }else if (AdminService.modifyPhone(modifyInfo[0], currentUserInfo[0], init.adminMap)) {
 		  System.out.println("");
 		  System.out.println("-------------------------------------------------------");
 		  System.out.println("修改联系方式成功！新联系方式为" + modifyInfo[0]);
 	      AdminUI.infoModifyPage();
 		  break;
 	  }else {
-		System.out.println("输入有误！\n\n");
+		System.err.println("输入有误！\n\n");
 	  }
     }
   }

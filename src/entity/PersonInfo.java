@@ -1,6 +1,9 @@
 package entity;
 
-public class PersonInfo {
+/**
+ * 基础信息表：账号，姓名，密码，联系方式
+ * */
+public abstract class PersonInfo {
   private String id; //学号，工号
   private String name; //姓名
   private String pwd; //密码
