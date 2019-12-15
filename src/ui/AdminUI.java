@@ -56,7 +56,8 @@ public class AdminUI {
 	System.out.println("=======================================================");
 	System.out.println("");
 	System.out.println("1.信息管理");
-	System.out.println("2.个人信息");
+	System.out.println("2.信息汇总");
+	System.out.println("3.个人信息");
 	System.out.println("（输入logout退出登录）");
 	System.out.println("");
 	System.out.println("-------------------------------------------------------");
@@ -70,6 +71,10 @@ public class AdminUI {
 	      isInputRight = 1;
 	      break;
 	    case "2":
+	      AdminUI.infoMergePage();
+	      isInputRight = 1;
+	      break;
+	    case "3":
 		  AdminUI.personalInfoPage();
 		  isInputRight = 1;
 		  break;
@@ -103,7 +108,7 @@ public class AdminUI {
 	System.out.println("-------------------------------------------------------");
 	int isInputRight = 0; //控制是否输入合法
 	while(isInputRight == 0) {
-	  System.out.print("请选择：");
+	  System.out.println("请选择：");
 	  String choice = input.next();
 	  switch (choice) {
 	    case "1":
@@ -116,7 +121,7 @@ public class AdminUI {
 		  break;
 	    case "3":
 		  isInputRight = 1;
-		  AdminUI.ModifyStudentPage();
+		  AdminUI.ModifyStudentInfo();
 		  break;
 	    case "4":
 		  isInputRight = 1;
@@ -206,7 +211,7 @@ public class AdminUI {
   /**
    * 管理端编辑指定学号的记录
    * */
-  public static void ModifyStudentPage() {
+  public static void ModifyStudentInfo() {
 	System.out.println("\n\n");
 	System.out.println(">管理员主页>信息管理>编辑");
 	System.out.println("=======================================================");
@@ -346,6 +351,97 @@ public class AdminUI {
 	  }
 	} 
 	System.out.println("-------------------------------------------------------");	
+  }
+  
+  /**
+   * 管理员端信息汇总页
+   * */
+  public static void infoMergePage() {
+	System.out.println("\n\n");
+	System.out.println(">管理员主页>信息汇总");
+	System.out.println("=======================================================");
+	System.out.println(""); 
+	System.out.println("1.分类显示");
+	System.out.println("2.分类统计"); 
+	System.out.println("（输入back返回上一页）");
+	System.out.println("");
+	System.out.println("-------------------------------------------------------");
+	int isInputRight = 0; //控制是否输入合法
+	while(isInputRight == 0) {
+	  System.out.println("请输入：");
+	  switch (input.next()){
+	    case "1":
+	      isInputRight = 1;
+	      AdminUI.infoClassifyPage();
+		  break;
+	    case "back":
+	      isInputRight = 1;
+	      AdminUI.mainPage();
+		default:
+		  System.err.println("输入有误! \n\n");
+	  }
+	}
+  }
+  
+  /**
+   * 管理端根据去向分类显示毕业生记录
+   * */
+  public static void infoClassifyPage() {
+	System.out.println("\n\n");
+	System.out.println(">管理员主页>信息汇总>分类显示");
+	System.out.println("=======================================================");
+	System.out.println(""); 
+	AdminService.classifyStuInfo(init.stuMap);
+	System.out.println("* 待业");
+	System.out.println("学号\t姓名\t性别\t专业\t毕业年份\t联系方式\t\t所在地\t");
+	for (Map.Entry<String, StudentInfo> entry : AdminService.restStuMap.entrySet()) {
+	  System.out.println(entry.getValue().getId()+"\t"+ entry.getValue().getName()+"\t"+entry.getValue().getSex()+"\t"+entry.getValue().getSpecialty()+"\t"+entry.getValue().getGraduYear()+"\t"+ entry.getValue().getPhone()+"\t"+entry.getValue().getPlace()+"\t");
+	}
+	System.out.println("\n\n* 入职");
+	System.out.println("学号\t姓名\t性别\t专业\t毕业年份\t联系方式\t\t单位\t岗位");
+	for (Map.Entry<String, StudentInfo> entry : AdminService.employStuMap.entrySet()) {
+	  System.out.println(entry.getValue().getId()+"\t"+ entry.getValue().getName()+"\t"+entry.getValue().getSex()+"\t"+entry.getValue().getSpecialty()+"\t"+entry.getValue().getGraduYear()+"\t"+ entry.getValue().getPhone()+"\t"+entry.getValue().getCompany()+"\t" + entry.getValue().getJob());
+	}
+	System.out.println("\n\n* 创业");
+	System.out.println("学号\t姓名\t性别\t专业\t毕业年份\t联系方式\t\t单位\t岗位");
+	for (Map.Entry<String, StudentInfo> entry : AdminService.createStuMap.entrySet()) {
+	  System.out.println(entry.getValue().getId()+"\t"+ entry.getValue().getName()+"\t"+entry.getValue().getSex()+"\t"+entry.getValue().getSpecialty()+"\t"+entry.getValue().getGraduYear()+"\t"+ entry.getValue().getPhone()+"\t"+entry.getValue().getCompany()+"\t"+ entry.getValue().getJob());
+	}
+	System.out.println("\n\n* 研究生");
+	System.out.println("学号\t姓名\t性别\t专业\t毕业年份\t联系方式\t\t学校\t");
+	for (Map.Entry<String, StudentInfo> entry : AdminService.furtherStuMap.entrySet()) {
+	  System.out.println(entry.getValue().getId()+"\t"+ entry.getValue().getName()+"\t"+entry.getValue().getSex()+"\t"+entry.getValue().getSpecialty()+"\t"+entry.getValue().getGraduYear()+"\t"+ entry.getValue().getPhone()+"\t"+entry.getValue().getSchool()+"\t");
+	}
+	System.out.println("\n\n* 未登记"); 
+	System.out.println("学号\t姓名\t性别\t专业\t毕业年份\t联系方式");
+	for (Map.Entry<String, StudentInfo> entry : AdminService.unfinishedStuMap.entrySet()) {
+	  System.out.println(entry.getValue().getId()+"\t"+ entry.getValue().getName()+"\t"+entry.getValue().getSex()+"\t"+entry.getValue().getSpecialty()+"\t"+entry.getValue().getGraduYear()+"\t"+ entry.getValue().getPhone()+"\t");
+	}
+	System.out.println("\n（输入back返回上一页；输入exit返回管理员主页）");
+	System.out.println("");
+	System.out.println("-------------------------------------------------------");
+	int isInputRight = 0; //控制是否输入合法
+	while(isInputRight == 0) {
+	  System.out.println("请输入：");
+	  switch (input.next()){
+	    case "back":
+	      isInputRight = 1;
+	      AdminUI.infoMergePage();
+		  break;
+	    case "exit":
+	      isInputRight = 1;
+	      AdminUI.mainPage();
+		default:
+		  System.err.println("输入有误! \n\n");
+	  }
+	}
+  }
+  
+  /**
+   * 管理端对信息进行分类汇总统计
+   * */
+  public static void infoStatisticPage() {
+	
   }
   
   /**

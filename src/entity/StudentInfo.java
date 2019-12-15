@@ -33,6 +33,62 @@ public class StudentInfo extends PersonInfo{
     this.graduYear = graduYear;
     this.specialty = specialty;
   }
+  
+  /**
+   * @param id 学号
+   * @param name 姓名
+   * @param pwd 密码
+   * @param phone 联系方式
+   * @param sex 性别
+   * @param graduYear 毕业年份
+   * @param specialty 专业
+   * @param type 就业类型->研究生/待业
+   * @param info 学校/所在地
+   * */
+  public StudentInfo(String id, String name, String pwd, String phone, String sex, String graduYear, String specialty, String type, String info) {
+    this.setId(id);
+    this.setName(name);
+    this.setPwd(pwd);
+    this.setPhone(phone);
+    this.sex = sex;
+    this.graduYear = graduYear;
+    this.specialty = specialty;
+    this.isFinished = "已登记";
+    if(type.equals("研究生")) {
+      this.employStatus = "研究生";
+      this.school = info;     
+    }else {
+      this.employStatus = "待业";
+      this.place = info;
+    }
+  }
+  
+  /**
+   * @param id 学号
+   * @param name 姓名
+   * @param pwd 密码
+   * @param phone 联系方式
+   * @param sex 性别
+   * @param graduYear 毕业年份
+   * @param specialty 专业
+   * @param type 就业类型->入职，创业
+   * @param company 公司
+   * @param job 岗位
+   * */
+  public StudentInfo(String id, String name, String pwd, String phone, String sex, String graduYear, String specialty, String type, String company, String job) {
+    this.setId(id);
+    this.setName(name);
+    this.setPwd(pwd);
+    this.setPhone(phone);
+    this.sex = sex;
+    this.graduYear = graduYear;
+    this.specialty = specialty;
+    this.isFinished = "已登记";
+    this.employStatus = type;
+    this.company = company;           
+    this.job = job;
+  }
+  
 
   public String getSex() {
 	return sex;

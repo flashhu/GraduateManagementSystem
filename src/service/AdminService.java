@@ -1,5 +1,6 @@
 package service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +19,31 @@ public class AdminService {
   public static String[] currentUserInfo = new String[7];
   //所查询的学生信息
   public static String[] inquireStuInfo = new String[7];
-	
+  /**
+   * 待业学生信息汇总
+   * */
+  public static HashMap<String, StudentInfo> restStuMap = new HashMap<String, StudentInfo>();
+  /**
+   * 入职学生信息汇总
+   * */
+  public static HashMap<String, StudentInfo> employStuMap = new HashMap<String, StudentInfo>();
+  /**
+   * 创业学生信息汇总
+   * */
+  public static HashMap<String, StudentInfo> createStuMap = new HashMap<String, StudentInfo>();
+  /**
+   * 研究生学生信息汇总
+   * */
+  public static HashMap<String, StudentInfo> furtherStuMap = new HashMap<String, StudentInfo>();
+  /**
+   * 未登记的学生信息汇总
+   * */
+  public static HashMap<String, StudentInfo> unfinishedStuMap = new HashMap<String, StudentInfo>();
+  /**
+   * 学生毕业年份汇总
+   * */
+  public ArrayList<StudentInfo> studentList = new ArrayList<StudentInfo>();
+  
   public AdminService() {
   }
 	
@@ -141,4 +166,30 @@ public class AdminService {
 	}
 	return inquireStuInfo;
   }
+  
+  /**
+   * 管理员端根据就业去向获得各类学生信息
+   * @return void
+   * */
+  public static void classifyStuInfo(HashMap<String, StudentInfo> student) {
+    
+	for (Map.Entry<String, StudentInfo> entry : student.entrySet()) {
+	  switch (entry.getValue().getEmployStatus()) {
+	    case "待业":
+	      restStuMap.put(entry.getValue().getId(), entry.getValue());
+	      break;
+	    case "入职":
+	      employStuMap.put(entry.getValue().getId(), entry.getValue());
+		  break; 
+	    case "创业":
+	      createStuMap.put(entry.getValue().getId(), entry.getValue());
+		  break;
+	    case "研究生":
+	      furtherStuMap.put(entry.getValue().getId(), entry.getValue());
+		  break;
+		default:
+		  unfinishedStuMap.put(entry.getValue().getId(), entry.getValue());
+	  }
+	}
+  } 
 }
