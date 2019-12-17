@@ -1,6 +1,5 @@
 package service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,29 +19,33 @@ public class AdminService {
   //所查询的学生信息
   public static String[] inquireStuInfo = new String[7];
   /**
-   * 待业学生信息汇总
+   * 待业学生信息汇总，调用需要使用classifyStuInfo方法，每次初始化为null
    * */
   public static HashMap<String, StudentInfo> restStuMap = new HashMap<String, StudentInfo>();
   /**
-   * 入职学生信息汇总
+   * 入职学生信息汇总，调用需要使用classifyStuInfo方法，每次初始化为null
    * */
   public static HashMap<String, StudentInfo> employStuMap = new HashMap<String, StudentInfo>();
   /**
-   * 创业学生信息汇总
+   * 创业学生信息汇总，调用需要使用classifyStuInfo方法，每次初始化为null
    * */
   public static HashMap<String, StudentInfo> createStuMap = new HashMap<String, StudentInfo>();
   /**
-   * 研究生学生信息汇总
+   * 研究生学生信息汇总，调用需要使用classifyStuInfo方法，每次初始化为null
    * */
   public static HashMap<String, StudentInfo> furtherStuMap = new HashMap<String, StudentInfo>();
   /**
-   * 未登记的学生信息汇总
+   * 未登记的学生信息汇总，调用需要使用classifyStuInfo方法，每次初始化为null
    * */
   public static HashMap<String, StudentInfo> unfinishedStuMap = new HashMap<String, StudentInfo>();
   /**
-   * 学生毕业年份汇总
+   * 男性学生信息汇总
    * */
-  public ArrayList<StudentInfo> studentList = new ArrayList<StudentInfo>();
+  public static HashMap<String, StudentInfo> maleStuMap = new HashMap<String, StudentInfo>(); 
+  /**
+   * 女性学生信息汇总
+   * */
+  public static HashMap<String, StudentInfo> femaleStuMap = new HashMap<String, StudentInfo>();
   
   public AdminService() {
   }
@@ -172,7 +175,11 @@ public class AdminService {
    * @return void
    * */
   public static void classifyStuInfo(HashMap<String, StudentInfo> student) {
-    
+	restStuMap.clear();
+	employStuMap.clear();
+	createStuMap.clear();
+	furtherStuMap.clear();
+	unfinishedStuMap.clear();
 	for (Map.Entry<String, StudentInfo> entry : student.entrySet()) {
 	  switch (entry.getValue().getEmployStatus()) {
 	    case "待业":
@@ -192,4 +199,18 @@ public class AdminService {
 	  }
 	}
   } 
+  
+  /**
+   * 管理员端根据性别获得各类学生信息
+   * */
+  public static void sexClassifyInfo(HashMap<String, StudentInfo> student) {
+	for (Map.Entry<String, StudentInfo> entry : student.entrySet()) {
+	  if(entry.getValue().getSex() == "男") {
+	    maleStuMap.put(entry.getValue().getId(), entry.getValue());
+	  }	
+	  if(entry.getValue().getSex() == "女") {
+		femaleStuMap.put(entry.getValue().getId(), entry.getValue());
+	  }	
+	}
+  }
 }

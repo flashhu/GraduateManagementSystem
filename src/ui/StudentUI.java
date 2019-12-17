@@ -42,7 +42,7 @@ public class StudentUI {
 		StudentUI.mainPage();
 		break;
 	  }
-	  System.err.println("输入有误！\n\n");
+	  System.err.println("学号或密码输入有误！\n\n");
     }
   }
   
@@ -50,12 +50,16 @@ public class StudentUI {
    * 学生端主页
    * */
   public static void mainPage() {
+	String[] currentUserInfo = StudentService.getStudentInfo(inputInfo[0], init.stuMap);
 	System.out.println("\n\n");
 	System.out.println(">学生主页");
 	System.out.println("=======================================================");
 	System.out.println("");
 	System.out.println("1.就业去向");
 	System.out.println("2.个人信息");
+	if(currentUserInfo[7].equals("未登记")) {
+	  System.out.println("\n请尽快完成就业登记！");
+	}
 	System.out.println("（输入logout退出登录）");
 	System.out.println("");
 	System.out.println("-------------------------------------------------------");
@@ -78,7 +82,7 @@ public class StudentUI {
 		  isInputRight = 1;
 		  return;
 	    default:
-		  System.err.println("输入有误！\n\n");
+		  System.err.println("请按导航内选项输入！\n\n");
 	  }
 	}
   }
@@ -119,7 +123,7 @@ public class StudentUI {
 			StudentUI.employInfoModifyPage();
 		    isInputRight = 1;
 	      }else {
-	    	System.err.println("输入有误！\n\n");
+	    	System.err.println("请按导航内选项输入！\n\n");
 	      }
 		  break;
 	    case "back":
@@ -127,7 +131,7 @@ public class StudentUI {
 		  isInputRight = 1;
 		  break;
 	    default:
-		  System.err.println("输入有误！\n\n");
+		  System.err.println("请按导航内选项输入！\n\n");
 	  }
 	}
   }
@@ -153,7 +157,7 @@ public class StudentUI {
 	System.out.println("-------------------------------------------------------");
 	int isInputRight = 0; //控制是否输入合法
 	while(isInputRight == 0) {
-	  System.out.print("请选择：");
+	  System.out.println("请选择：");
 	  String choice = input.next();
 	  switch (choice) {
 	    case "1":
@@ -184,7 +188,7 @@ public class StudentUI {
 		  isInputRight = 1;
 		  break;
 	    default:
-		  System.err.println("输入有误！\n\n");
+		  System.err.println("请按导航内选项输入！\n\n");
 	  }
 	}
 	
@@ -215,7 +219,7 @@ public class StudentUI {
 			StudentService.modifyPhone(registerInfo[1], currentUserInfo[0], init.stuMap);
 			isInputRight = 1;
 		  }else {
-			System.err.println("输入有误!");
+			System.err.println("手机号格式有误!");
 		  }
 		}else {
 		  isInputRight = 1;
@@ -333,7 +337,7 @@ public class StudentUI {
 	      isInputRight = 1;
 	      StudentUI.mainPage();
 		default:
-		  System.err.println("输入有误! \n\n");
+		  System.err.println("请按导航内选项输入！ \n\n");
 	  }
 	}
   }
@@ -390,7 +394,7 @@ public class StudentUI {
 		  isInputRight = 1;
 		  break;
 	    default:
-		  System.err.println("输入有误！\n\n");
+		  System.err.println("请按导航内选项输入！\n\n");
 	  }
 	}
   }
@@ -426,7 +430,7 @@ public class StudentUI {
 		  isInputRight = 1;
 		  break;
 	    default:
-		  System.err.println("输入有误！\n\n");
+		  System.err.println("请按导航内选项输入！\n\n");
 	  }
 	}
   }
@@ -462,7 +466,7 @@ public class StudentUI {
 	      isInputRight = 1;
 	      StudentUI.mainPage();
 		default:
-		  System.err.println("输入有误! \n\n");
+		  System.err.println("请按导航内选项输入！ \n\n");
 	  }
 	}
   }
@@ -502,7 +506,7 @@ public class StudentUI {
 	      isInputRight = 1;
 	      break;
 	    default:
-		  System.err.println("输入有误！\n\n");
+		  System.err.println("请按导航内选项输入！\n\n");
 	  }
 	}
   }
@@ -532,7 +536,7 @@ public class StudentUI {
 		  break;
 		}
 	  }else {
-		System.err.println("输入有误！\n\n");
+		System.err.println("原密码匹配不成功！\n\n");
 	  }
     }
   }
@@ -558,7 +562,7 @@ public class StudentUI {
 	      StudentUI.infoModifyPage();
 		  break;
 	  }else {
-		System.err.println("输入有误！\n\n");
+		System.err.println("手机号格式有误！\n\n");
 	  }
     }
   }

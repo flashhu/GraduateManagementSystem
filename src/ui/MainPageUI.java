@@ -37,7 +37,7 @@ public class MainPageUI {
 		System.out.println("\n====================== 感谢使用！====================");
 		break;
 	  default:
-		System.err.println("输入有误！\n\n\n");
+		System.err.println("请按导航内选项输入！\n\n\n");
 		MainPageUI.welcome();
 	}
   }

@@ -1,5 +1,6 @@
 package ui;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -42,7 +43,7 @@ public class AdminUI {
 		AdminUI.mainPage();
 		break;
 	  }
-	  System.err.println("输入有误！\n\n");
+	  System.err.println("工号或密码输入有误！\n\n");
     }
   }
   
@@ -84,7 +85,7 @@ public class AdminUI {
 		  isInputRight = 1;
 		  break;
 	    default:
-		  System.err.println("输入有误！\n\n");
+		  System.err.println("请按导航内选项输入！\n\n");
 	  }
 	}
   }
@@ -136,7 +137,7 @@ public class AdminUI {
 		  isInputRight = 1;
 		  break;
 	    default:
-		  System.err.println("输入有误！\n\n");
+		  System.err.println("请按导航内选项输入！\n\n");
 	  }
 	}
   }
@@ -168,7 +169,7 @@ public class AdminUI {
 	      isInputRight = 1;
 	      AdminUI.mainPage();
 		default:
-		  System.err.println("输入有误! \n\n");
+		  System.err.println("请按导航内选项输入! \n\n");
 	  }
 	}
   }
@@ -243,7 +244,7 @@ public class AdminUI {
 		  isInputRight = 1;
 		  break;
 	    default:
-		  System.err.println("输入有误！\n\n");
+		  System.err.println("请按导航内选项输入！\n\n");
 	  }
 	}
 
@@ -322,7 +323,7 @@ public class AdminUI {
 	   	  AdminUI.infoManagePage();
 	      break;
 	    }else {
-	      System.err.println("输入有误！\n");
+	      System.err.println("请按导航内选项输入！\n");
 	    } 
 	  }else {
 		System.err.println("未找到对应项！\n\n");
@@ -361,78 +362,61 @@ public class AdminUI {
 	System.out.println(">管理员主页>信息汇总");
 	System.out.println("=======================================================");
 	System.out.println(""); 
-	System.out.println("1.分类显示");
-	System.out.println("2.分类统计"); 
-	System.out.println("（输入back返回上一页）");
+	AdminUI.infoStatisticPage();
+	System.out.println("\n（输入back返回上一页）");
 	System.out.println("");
 	System.out.println("-------------------------------------------------------");
 	int isInputRight = 0; //控制是否输入合法
 	while(isInputRight == 0) {
 	  System.out.println("请输入：");
-	  switch (input.next()){
-	    case "1":
-	      isInputRight = 1;
-	      AdminUI.infoClassifyPage();
-		  break;
-	    case "back":
-	      isInputRight = 1;
-	      AdminUI.mainPage();
-		default:
-		  System.err.println("输入有误! \n\n");
+	  if(input.next().equals("back")){
+	    isInputRight = 1;
+	    AdminUI.mainPage();
+	    break;
+	  }else {
+		System.err.println("请按导航内选项输入！\n\n");
 	  }
 	}
   }
   
   /**
-   * 管理端根据去向分类显示毕业生记录
+   * 管理端根据去向分类显示全部毕业生记录（待业，入职，创业，研究生，未登记）
    * */
-  public static void infoClassifyPage() {
-	System.out.println("\n\n");
-	System.out.println(">管理员主页>信息汇总>分类显示");
-	System.out.println("=======================================================");
-	System.out.println(""); 
-	AdminService.classifyStuInfo(init.stuMap);
-	System.out.println("* 待业");
-	System.out.println("学号\t姓名\t性别\t专业\t毕业年份\t联系方式\t\t所在地\t");
-	for (Map.Entry<String, StudentInfo> entry : AdminService.restStuMap.entrySet()) {
-	  System.out.println(entry.getValue().getId()+"\t"+ entry.getValue().getName()+"\t"+entry.getValue().getSex()+"\t"+entry.getValue().getSpecialty()+"\t"+entry.getValue().getGraduYear()+"\t"+ entry.getValue().getPhone()+"\t"+entry.getValue().getPlace()+"\t");
+  public static void infoClassifyPage(HashMap<String, StudentInfo> student) {
+	AdminService.classifyStuInfo(student);
+	if(!AdminService.restStuMap.isEmpty()) {
+	  System.out.println("『待业』");
+	  System.out.println("学号\t姓名\t性别\t专业\t毕业年份\t联系方式\t\t所在地\t");
+	  for (Map.Entry<String, StudentInfo> entry : AdminService.restStuMap.entrySet()) {
+	    System.out.println(entry.getValue().getId()+"\t"+ entry.getValue().getName()+"\t"+entry.getValue().getSex()+"\t"+entry.getValue().getSpecialty()+"\t"+entry.getValue().getGraduYear()+"\t"+ entry.getValue().getPhone()+"\t"+entry.getValue().getPlace()+"\t");
+	  }
 	}
-	System.out.println("\n\n* 入职");
-	System.out.println("学号\t姓名\t性别\t专业\t毕业年份\t联系方式\t\t单位\t岗位");
-	for (Map.Entry<String, StudentInfo> entry : AdminService.employStuMap.entrySet()) {
-	  System.out.println(entry.getValue().getId()+"\t"+ entry.getValue().getName()+"\t"+entry.getValue().getSex()+"\t"+entry.getValue().getSpecialty()+"\t"+entry.getValue().getGraduYear()+"\t"+ entry.getValue().getPhone()+"\t"+entry.getValue().getCompany()+"\t" + entry.getValue().getJob());
+	if(!AdminService.employStuMap.isEmpty()) {
+	  System.out.println("『入职』");
+	  System.out.println("学号\t姓名\t性别\t专业\t毕业年份\t联系方式\t\t单位\t岗位");
+	  for (Map.Entry<String, StudentInfo> entry : AdminService.employStuMap.entrySet()) {
+	    System.out.println(entry.getValue().getId()+"\t"+ entry.getValue().getName()+"\t"+entry.getValue().getSex()+"\t"+entry.getValue().getSpecialty()+"\t"+entry.getValue().getGraduYear()+"\t"+ entry.getValue().getPhone()+"\t"+entry.getValue().getCompany()+"\t" + entry.getValue().getJob());
+	  }
 	}
-	System.out.println("\n\n* 创业");
-	System.out.println("学号\t姓名\t性别\t专业\t毕业年份\t联系方式\t\t单位\t岗位");
-	for (Map.Entry<String, StudentInfo> entry : AdminService.createStuMap.entrySet()) {
-	  System.out.println(entry.getValue().getId()+"\t"+ entry.getValue().getName()+"\t"+entry.getValue().getSex()+"\t"+entry.getValue().getSpecialty()+"\t"+entry.getValue().getGraduYear()+"\t"+ entry.getValue().getPhone()+"\t"+entry.getValue().getCompany()+"\t"+ entry.getValue().getJob());
+	if(!AdminService.createStuMap.isEmpty()) {
+	  System.out.println("『创业』");
+	  System.out.println("学号\t姓名\t性别\t专业\t毕业年份\t联系方式\t\t单位\t岗位");
+	  for (Map.Entry<String, StudentInfo> entry : AdminService.createStuMap.entrySet()) {
+	    System.out.println(entry.getValue().getId()+"\t"+ entry.getValue().getName()+"\t"+entry.getValue().getSex()+"\t"+entry.getValue().getSpecialty()+"\t"+entry.getValue().getGraduYear()+"\t"+ entry.getValue().getPhone()+"\t"+entry.getValue().getCompany()+"\t"+ entry.getValue().getJob());
+	  }
 	}
-	System.out.println("\n\n* 研究生");
-	System.out.println("学号\t姓名\t性别\t专业\t毕业年份\t联系方式\t\t学校\t");
-	for (Map.Entry<String, StudentInfo> entry : AdminService.furtherStuMap.entrySet()) {
-	  System.out.println(entry.getValue().getId()+"\t"+ entry.getValue().getName()+"\t"+entry.getValue().getSex()+"\t"+entry.getValue().getSpecialty()+"\t"+entry.getValue().getGraduYear()+"\t"+ entry.getValue().getPhone()+"\t"+entry.getValue().getSchool()+"\t");
+	if(!AdminService.furtherStuMap.isEmpty()) {
+	  System.out.println("『研究生』");
+	  System.out.println("学号\t姓名\t性别\t专业\t毕业年份\t联系方式\t\t学校\t");
+	  for (Map.Entry<String, StudentInfo> entry : AdminService.furtherStuMap.entrySet()) {
+	    System.out.println(entry.getValue().getId()+"\t"+ entry.getValue().getName()+"\t"+entry.getValue().getSex()+"\t"+entry.getValue().getSpecialty()+"\t"+entry.getValue().getGraduYear()+"\t"+ entry.getValue().getPhone()+"\t"+entry.getValue().getSchool()+"\t");
+	  }
 	}
-	System.out.println("\n\n* 未登记"); 
-	System.out.println("学号\t姓名\t性别\t专业\t毕业年份\t联系方式");
-	for (Map.Entry<String, StudentInfo> entry : AdminService.unfinishedStuMap.entrySet()) {
-	  System.out.println(entry.getValue().getId()+"\t"+ entry.getValue().getName()+"\t"+entry.getValue().getSex()+"\t"+entry.getValue().getSpecialty()+"\t"+entry.getValue().getGraduYear()+"\t"+ entry.getValue().getPhone()+"\t");
-	}
-	System.out.println("\n（输入back返回上一页；输入exit返回管理员主页）");
-	System.out.println("");
-	System.out.println("-------------------------------------------------------");
-	int isInputRight = 0; //控制是否输入合法
-	while(isInputRight == 0) {
-	  System.out.println("请输入：");
-	  switch (input.next()){
-	    case "back":
-	      isInputRight = 1;
-	      AdminUI.infoMergePage();
-		  break;
-	    case "exit":
-	      isInputRight = 1;
-	      AdminUI.mainPage();
-		default:
-		  System.err.println("输入有误! \n\n");
+	if(!AdminService.unfinishedStuMap.isEmpty()) {
+	  System.out.println("『未登记』"); 
+	  System.out.println("学号\t姓名\t性别\t专业\t毕业年份\t联系方式");
+	  for (Map.Entry<String, StudentInfo> entry : AdminService.unfinishedStuMap.entrySet()) {
+	    System.out.println(entry.getValue().getId()+"\t"+ entry.getValue().getName()+"\t"+entry.getValue().getSex()+"\t"+entry.getValue().getSpecialty()+"\t"+entry.getValue().getGraduYear()+"\t"+ entry.getValue().getPhone()+"\t");
 	  }
 	}
   }
@@ -441,7 +425,30 @@ public class AdminUI {
    * 管理端对信息进行分类汇总统计
    * */
   public static void infoStatisticPage() {
+	int allNum = init.stuMap.size();
+	System.out.println("【总人数：" + allNum + "】\n"); 
+	AdminService.sexClassifyInfo(init.stuMap);
 	
+	AdminService.classifyStuInfo(AdminService.maleStuMap);
+	int maleNum = AdminService.maleStuMap.size();
+	int maleUnFinish = AdminService.unfinishedStuMap.size();
+	int maleRest = AdminService.restStuMap.size();
+	int maleStudy = AdminService.furtherStuMap.size();
+	System.out.println("【 男：" + maleNum + "人】");
+	AdminUI.infoClassifyPage(AdminService.maleStuMap);
+	
+	AdminService.classifyStuInfo(AdminService.femaleStuMap);
+	int femaleNum = AdminService.femaleStuMap.size();
+	int femaleUnFinish = AdminService.unfinishedStuMap.size();
+	int femaleRest = AdminService.restStuMap.size();
+	int femaleStudy = AdminService.furtherStuMap.size();
+	System.out.println("\n【 女：" + femaleNum + "人】");
+	AdminUI.infoClassifyPage(AdminService.femaleStuMap);
+	
+	System.out.println("\n\n" + (maleUnFinish + femaleUnFinish) + "位同学尚未完成就业登记");
+	System.out.println("男女比例为 " + (maleNum*1.0 / femaleNum));
+	int employeeNum = allNum - maleUnFinish - femaleUnFinish - maleStudy - femaleStudy;
+	System.out.println("总就业率为 " + (employeeNum - maleRest - femaleRest) * 1.00/employeeNum);
   }
   
   /**
@@ -476,7 +483,7 @@ public class AdminUI {
 		  isInputRight = 1;
 		  break;
 	    default:
-		  System.err.println("输入有误！\n\n");
+		  System.err.println("请按导航内选项输入！\n\n");
 	  }
 	}
   }
@@ -507,7 +514,7 @@ public class AdminUI {
 	    case "exit":
 	      AdminUI.mainPage();
 		default:
-		  System.err.println("输入有误! \n\n");
+		  System.err.println("请按导航内选项输入！ \n\n");
 	  }
 	}
   }
@@ -547,7 +554,7 @@ public class AdminUI {
 	      isInputRight = 1;
 	      break;
 	    default:
-		  System.err.println("输入有误！\n\n");
+		  System.err.println("请按导航内选项输入！\n\n");
 	  }
 	}
   }
@@ -577,7 +584,7 @@ public class AdminUI {
 		  break;
 		}
 	  }else {
-		System.err.println("输入有误！\n\n");
+		System.err.println("原密码匹配不成功！\n\n");
 	  }
     }
   }
@@ -603,7 +610,7 @@ public class AdminUI {
 	      AdminUI.infoModifyPage();
 		  break;
 	  }else {
-		System.err.println("输入有误！\n\n");
+		System.err.println("手机号格式有误！\n\n");
 	  }
     }
   }

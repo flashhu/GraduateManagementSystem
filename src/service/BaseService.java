@@ -19,4 +19,8 @@ public class BaseService {
 	b = m.matches();
 	return b;
   }
+  
+  /**
+   * 小数化为百分数
+   * */
 }
