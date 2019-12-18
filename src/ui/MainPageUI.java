@@ -34,7 +34,7 @@ public class MainPageUI {
 		AdminUI.loginPage();
 		break;
 	  case "exit":
-		System.out.println("\n====================== 感谢使用！====================");
+		System.out.println("\n====================== 感谢使用！=====================");
 		break;
 	  default:
 		System.err.println("请按导航内选项输入！\n\n\n");

@@ -181,8 +181,15 @@ public class AdminUI {
 	System.out.println("\n\n");
 	System.out.println(">管理员主页>信息管理>增加");
 	System.out.println("=======================================================");
-	System.out.print("请输入学号：");
-	addInfo[0] = input.next();
+	while(true) {
+	  System.out.print("请输入学号：");
+      addInfo[0] = input.next();
+      if(AdminService.isInStuList(addInfo[0], init.stuMap)) {
+        System.err.println("该学号已被占用!");
+      }else {
+    	break;
+      }
+	}
 	System.out.print("请输入姓名：");
 	addInfo[1] = input.next();
 	System.out.print("请输入性别：");
@@ -195,7 +202,7 @@ public class AdminUI {
 	  if(BaseService.isMobile(addInfo[4])) {
 		break;
 	  }else {
-		System.err.println("输入有误！");
+		System.err.println("手机号格式有误!");
 	  }
 	}
 	System.out.print("请输入专业：");
@@ -247,7 +254,6 @@ public class AdminUI {
 		  System.err.println("请按导航内选项输入！\n\n");
 	  }
 	}
-
   }
   
   /**
@@ -351,7 +357,25 @@ public class AdminUI {
 		System.err.println("未找到对应项！\n\n");  
 	  }
 	} 
+	System.out.println("（输入back返回上一页；输入exit返回管理员主页）");
 	System.out.println("-------------------------------------------------------");	
+	int isInputRight = 0; //控制是否输入合法
+	while(isInputRight == 0) {
+	  System.out.print("请选择：");
+	  String choice = input.next();
+	  switch (choice) {
+	    case "exit":
+		  AdminUI.mainPage();
+		  isInputRight = 1;
+		  break;
+	    case "back":
+		  AdminUI.infoManagePage();
+		  isInputRight = 1;
+		  break;
+	    default:
+		  System.err.println("请按导航内选项输入！\n\n");
+	  }
+	}
   }
   
   /**
@@ -603,7 +627,7 @@ public class AdminUI {
 	  if(modifyInfo[0].equals("back")) {
 		AdminUI.infoModifyPage();
 		break;  
-	  }else if (AdminService.modifyPhone(modifyInfo[0], currentUserInfo[0], init.adminMap)) {
+	  }else if (BaseService.isMobile(modifyInfo[0]) & AdminService.modifyPhone(modifyInfo[0], currentUserInfo[0], init.adminMap)) {
 		  System.out.println("");
 		  System.out.println("-------------------------------------------------------");
 		  System.out.println("修改联系方式成功！新联系方式为" + modifyInfo[0]);

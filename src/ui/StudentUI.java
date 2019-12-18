@@ -358,7 +358,7 @@ public class StudentUI {
 	System.out.println("-------------------------------------------------------");
 	int isInputRight = 0; //控制是否输入合法
 	while(isInputRight == 0) {
-	  System.out.print("请选择：");
+	  System.out.println("请选择：");
 	  String choice = input.next();
 	  switch (choice) {
 	    case "1":
@@ -414,7 +414,7 @@ public class StudentUI {
 	System.out.println("-------------------------------------------------------");
 	int isInputRight = 0; //控制是否输入合法
 	while(isInputRight == 0) {
-	  System.out.print("请选择：");
+	  System.out.println("请选择：");
 	  String choice = input.next();
 	  switch (choice) {
 	    case "1":
@@ -456,7 +456,7 @@ public class StudentUI {
 	System.out.println("-------------------------------------------------------");
 	int isInputRight = 0; //控制是否输入合法
 	while(isInputRight == 0) {
-	  System.out.print("请输入：");
+	  System.out.println("请输入：");
 	  switch (input.next()){
 	    case "back":
 	      isInputRight = 1;
@@ -486,7 +486,7 @@ public class StudentUI {
 	System.out.println("-------------------------------------------------------");	
 	int isInputRight = 0; //控制是否输入合法
 	while(isInputRight == 0) {
-	  System.out.print("请选择：");
+	  System.out.println("请选择：");
 	  String choice = input.next();
 	  switch (choice) {
 	    case "1":
