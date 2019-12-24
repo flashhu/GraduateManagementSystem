@@ -3,47 +3,52 @@ package ui;
 import java.util.Scanner;
 
 /**
- * ÏµÍ³Ö÷½çÃæ
+ * ç³»ç»Ÿä¸»ç•Œé¢
  * */
 public class MainPageUI {
   private static Scanner input = new Scanner(System.in);
   
   /**
-   * Ö÷Ò³ÑùÊ½ÉèÖÃ
+   * ä¸»é¡µæ ·å¼è®¾ç½®
    * */
   public static void welcome() {
 	System.out.println("=======================================================");
 	System.out.println("");
-	System.out.println("\t\t±ÏÒµÉú¾ÍÒµÈ¥Ïò¹ÜÀíÏµÍ³");
-	System.out.println(">µÇÂ¼");
+	System.out.println("\t\tæ¯•ä¸šç”Ÿå°±ä¸šå»å‘ç®¡ç†ç³»ç»Ÿ");
+	System.out.println(">ç™»å½•");
 	System.out.println("=======================================================");
 	System.out.println("");
-	System.out.println("1.Ñ§Éú");
-	System.out.println("2.¹ÜÀíÔ±");
-	System.out.println("(ÊäÈëexitÍË³öÏµÍ³£©");
+	System.out.println("1.å­¦ç”Ÿ");
+	System.out.println("2.ç®¡ç†å‘˜");
+	System.out.println("(è¾“å…¥exité€€å‡ºç³»ç»Ÿï¼‰");
 	System.out.println("");
 	System.out.println("-------------------------------------------------------");
-	System.out.println("Ñ§Éú¿ÉÓÃÕËºÅ\t201800 \t³õÊ¼ÃÜÂë\t00 \n¹ÜÀíÔ±¿ÉÓÃÕËºÅ\t001 \t³õÊ¼ÃÜÂë\t1\n");
-	System.out.print("ÇëÑ¡Ôñ£º");
-	String choice = input.next();
-	switch (choice) {
-	  case "1":
-		StudentUI.loginPage();
-		break;
-	  case "2":
-		AdminUI.loginPage();
-		break;
-	  case "exit":
-		System.out.println("\n====================== ¸ĞĞ»Ê¹ÓÃ£¡=====================");
-		break;
-	  default:
-		System.err.println("Çë°´µ¼º½ÄÚÑ¡ÏîÊäÈë£¡\n\n\n");
-		MainPageUI.welcome();
+	System.out.println("å­¦ç”Ÿå¯ç”¨è´¦å·\t201800 \tåˆå§‹å¯†ç \t00 \nç®¡ç†å‘˜å¯ç”¨è´¦å·\t001 \tåˆå§‹å¯†ç \t1\n");
+	int isInputRight = 0; //æ§åˆ¶æ˜¯å¦è¾“å…¥åˆæ³•
+	while(isInputRight == 0) {
+	  System.out.print("è¯·é€‰æ‹©ï¼š");
+	  String choice = input.next();
+	  switch (choice) {
+	    case "1":
+	      isInputRight = 1;
+	      StudentUI.loginPage();
+	      break;
+	    case "2":
+	      isInputRight = 1;
+	      AdminUI.loginPage();
+	      break;
+	    case "exit":
+	      isInputRight = 1;
+	      System.out.println("\n====================== æ„Ÿè°¢ä½¿ç”¨ï¼=====================");
+	      break;
+	    default:
+	      System.err.println("è¯·æŒ‰å¯¼èˆªå†…é€‰é¡¹è¾“å…¥ï¼\n");
+	  }
 	}
   }
   
   /**
-   * ÅĞ¶ÏÊÇ·ñÎªÊäÈëexit,·µ»ØÖ÷Ò³Ãæ
+   * åˆ¤æ–­æ˜¯å¦ä¸ºè¾“å…¥exit,è¿”å›ä¸»é¡µé¢
    */
   public static boolean isExit(String input) {
 	if(input.equals("exit")) {
